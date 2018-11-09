@@ -202,7 +202,7 @@ class IndexController extends BaseController
         $ql->use(PhantomJs::class, 'D:\xampp\htdocs\lesson\runtime\phantomjs\phantomjs.exe');
 
         $lessonInfo = [];
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 1; $i++) {
             $url = 'https://www.imooc.com/course/list?sort=pop&page='. $i;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -222,8 +222,11 @@ class IndexController extends BaseController
                 $info['id'] = explode('/', $v['url'])[2];//课程ID（慕课网上的ID）
                 $info['url'] = 'https://www.imooc.com' . $v['url'];//课程网址
 
-                //查找数据库，判断当前课程是否已存在，如果存在则更新此课程
-
+                //查找数据库，判断当前课程是否已存在，如果存在则跳过此课程
+                $result = $lessonModel->getLessonCount(['id' => $info['id']]);
+                if ($result != 0) {
+                    continue;
+                }
 
                 //抓取课程信息，并存入数据库
                 $data = $this->grabMOOCLessonInfo($info['url']);
@@ -234,7 +237,11 @@ class IndexController extends BaseController
                 die();
                 //抓取课程评论，并存入数据库
                 $commentUrl = 'https://www.imooc.com/coursescore/'. $info['id'];
-                $commentInfo[] = $this->grabMOOCComment($commentUrl);
+                $commentInfo = $this->grabMOOCComment($commentUrl);
+
+                foreach ($commentInfo as $value) {
+                    
+                }
             }
             break;
         }
