@@ -1,0 +1,18 @@
+#如果mod_rewrite.c模块存在，则执行以下命令
+<IfModule mod_rewrite.c>
+  Options +FollowSymlinks -Multiviews
+  RewriteEngine On   #开启rewriteEngine
+
+  #!-d的意思是不是目录或目录不存在
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  #!-f的意思是不是文件或文件不存在
+  RewriteCond %{REQUEST_FILENAME} !-f
+
+  #转给index.php处理
+  #^(.*)$-匹配所有的路径映射到入口文件 index.php/$1（$1为变量1）
+  #[QSA]-表示保留参数如get传值?xxx==xx...;
+  #[PT]-再把这个URL交给Apache处理;
+  #[L]-这是最后一个匹配项，不再往下匹配
+  RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+</IfModule>

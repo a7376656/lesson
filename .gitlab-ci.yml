@@ -1,0 +1,13 @@
+stages:
+  - deploy
+deploy:
+  stage: deploy
+  script:
+    - whoami
+    - cd /opt/lampp/htdocs/git_test
+    - pwd
+    - git pull origin master
+  only:
+    - master
+  tags:
+    - test,wanbing.shi
