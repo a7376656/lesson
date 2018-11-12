@@ -1,4 +1,4 @@
 <?php
 return [
-    'app\index\command\Test',//TODO 测试命令
+    'app\index\command\Grab',//抓取慕课课程及评论
 ];
