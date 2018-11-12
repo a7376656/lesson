@@ -240,7 +240,7 @@ class IndexController extends BaseController
                 $commentInfo = $this->grabMOOCComment($commentUrl);
 
                 foreach ($commentInfo as $value) {
-                    
+
                 }
             }
             break;
