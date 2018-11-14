@@ -54,7 +54,7 @@ class IndexController extends BaseController
                     $data = $this->grabMOOCLessonInfo($info['url']);
                     $lessonInfo = array_merge($info, $data);
                     /* TODO 如果想存入数据库，则将以下注释去了 */
-//                $lessonModel->addLesson($lessonInfo);
+                    $lessonModel->addLesson($lessonInfo);
 
                     //抓取课程评论，并存入数据库
                     $commentUrl = 'https://www.imooc.com/coursescore/' . $info['id'];
@@ -64,19 +64,20 @@ class IndexController extends BaseController
                         //添加评论
                         $value['lessonId'] = $info['id'];
                         /* TODO 如果想存入数据库，则将以下注释去了 */
-//                        $commentModel->addComment($value);
+                        $commentModel->addComment($value);
                     }
-                    break;// TODO 正式抓时将这里删除
+//                    break;// TODO 正式抓时将这里删除
                 }
-                break;// TODO 正式抓时将这里删除
+//                break;// TODO 正式抓时将这里删除
             }
 
             Db::commit();
-            $this->ajaxReturn(1000, 'ok');
         } catch (\Exception $e) {
             Db::rollback();
-            $this->ajaxReturn(1002, '抓取失败，请重试');
+            $this->ajaxReturn(1002, '抓取失败，请重试。'. '原因：'. $e->getMessage());
         }
+
+        $this->ajaxReturn(1000, 'ok');
     }
 
     /**
