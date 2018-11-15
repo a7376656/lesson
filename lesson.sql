@@ -36,9 +36,9 @@ CREATE TABLE `l_comment` (
   `content` text NOT NULL COMMENT '评论内容',
   `score` int(4) NOT NULL DEFAULT '0' COMMENT '评分（最高10）',
   `lessonId` int(11) NOT NULL DEFAULT '0' COMMENT '对应的课程ID',
-  `grabTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '抓取时间',
+  `grabTime` datetime NOT NULL COMMENT '抓取时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=245218 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `l_lesson` */
 
@@ -55,7 +55,7 @@ CREATE TABLE `l_lesson` (
   `commentNum` int(11) NOT NULL DEFAULT '0' COMMENT '评论人数',
   `comprehensiveScore` decimal(10,1) NOT NULL DEFAULT '0.0' COMMENT '综合评分',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT '课程网址',
-  `grabTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '抓取时间',
+  `grabTime` datetime NOT NULL COMMENT '抓取时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -67,7 +67,7 @@ CREATE TABLE `l_users` (
   `uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID，自增主键',
   `username` varchar(30) NOT NULL DEFAULT '' COMMENT '用户名',
   `password` varchar(255) NOT NULL DEFAULT '' COMMENT '密码',
-  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `createTime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
