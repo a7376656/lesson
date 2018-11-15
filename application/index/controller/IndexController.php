@@ -11,6 +11,14 @@ use think\Db;
 class IndexController extends BaseController
 {
     /**
+     * 默认显示
+     */
+    public function index()
+    {
+        echo '你好';
+    }
+
+    /**
      * 抓取慕课课程及评论
      */
     public function grabMOOC()

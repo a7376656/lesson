@@ -14,13 +14,13 @@ return [
         // 数据库类型
         'type'            => 'mysql',
         // 服务器地址
-        'hostname'        => 'localhost',
+        'hostname'        => '120.79.227.193',
         // 数据库名
         'database'        => 'lesson',
         // 用户名
         'username'        => 'root',
         // 密码
-        'password'        => '',
+        'password'        => '1170db',
         // 端口
         'hostport'        => '3306',
         // 连接dsn
