@@ -51,6 +51,7 @@ class IndexController extends BaseController
                     $info['studyNum'] = $v['studyNum'];
                     $info['id'] = explode('/', $v['url'])[2];//课程ID（慕课网上的ID）
                     $info['url'] = 'https://www.imooc.com' . $v['url'];//课程网址
+                    $info['grabTime'] = date('Y-m-d H:i:s');
 
                     //查找数据库，判断当前课程是否已存在，如果存在则跳过此课程
                     $result = $lessonModel->getLessonCount(['id' => $info['id']]);
@@ -67,10 +68,12 @@ class IndexController extends BaseController
                     //抓取课程评论，并存入数据库
                     $commentUrl = 'https://www.imooc.com/coursescore/' . $info['id'];
                     $commentInfo = $this->grabMOOCComment($commentUrl);
+                    $nowTime = date('Y-m-d H:i:s');
 
                     foreach ($commentInfo as $value) {
                         //添加评论
                         $value['lessonId'] = $info['id'];
+                        $value['grabTime'] = $nowTime;
                         /* TODO 如果想存入数据库，则将以下注释去了 */
                         $commentModel->addComment($value);
                     }
