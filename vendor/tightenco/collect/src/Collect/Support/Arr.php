@@ -384,19 +384,20 @@ class Arr
     public static function pluck($array, $value, $key = null)
     {
         $results = [];
+        $arr = [];
 
-        [$value, $key] = static::explodePluckParameters($value, $key);
+        $arr = static::explodePluckParameters($value, $key);
 
         foreach ($array as $item) {
-            $itemValue = data_get($item, $value);
+            $itemValue = data_get($item, $arr[0]);
 
             // If the key is "null", we will just append the value to the array and keep
             // looping. Otherwise we will key the array using the value of the key we
             // received from the developer. Then we'll return the final array form.
-            if (is_null($key)) {
+            if (is_null($arr[1])) {
                 $results[] = $itemValue;
             } else {
-                $itemKey = data_get($item, $key);
+                $itemKey = data_get($item, $arr[1]);
 
                 if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
                     $itemKey = (string) $itemKey;
