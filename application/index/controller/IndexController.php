@@ -11,9 +11,6 @@ use think\Db;
 
 class IndexController extends BaseController
 {
-    const WINDOWS_PHANTOM_URL = 'D:\xampp\htdocs\lesson\runtime\phantomjs\phantomjs.exe';//windows上phantomjs地址
-    const LINUX_PHANTOM_URL = '/usr/phantomjs';//linux服务器上phantomjs地址
-
     /**
      * 默认显示
      */
@@ -47,7 +44,7 @@ class IndexController extends BaseController
         Db::startTrans();
         try {
             //抓取前3页课程，一共90个。（每页30个，如果想抓120个则将3改为4）
-            for ($i = 3; $i <= 3; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 $url = 'https://www.imooc.com/course/list?sort=pop&page=' . $i;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -92,9 +89,9 @@ class IndexController extends BaseController
                         /* TODO 如果想存入数据库，则将以下注释去了 */
                         $commentModel->addComment($value);
                     }
-                    break;// TODO 正式抓时将这里删除
+//                    break;// TODO 正式抓时将这里注释
                 }
-                break;// TODO 正式抓时将这里删除
+//                break;// TODO 正式抓时将这里注释
             }
 
             Db::commit();
