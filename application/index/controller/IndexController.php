@@ -27,12 +27,12 @@ class IndexController extends BaseController
         $commentModel = new CommentModel();
 
         $ql = QueryList::getInstance();
-        $ql->use(PhantomJs::class, 'D:\xampp\htdocs\lesson\runtime\phantomjs\phantomjs.exe');
+        $ql->use(PhantomJs::class, '/usr/phantomjs');
 
         Db::startTrans();
         try {
             //抓取前3页课程，一共90个。（每页30个，如果想抓120个则将3改为4）
-            for ($i = 1; $i <= 3; $i++) {
+            for ($i = 3; $i <= 3; $i++) {
                 $url = 'https://www.imooc.com/course/list?sort=pop&page=' . $i;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -77,9 +77,9 @@ class IndexController extends BaseController
                         /* TODO 如果想存入数据库，则将以下注释去了 */
                         $commentModel->addComment($value);
                     }
-//                    break;// TODO 正式抓时将这里删除
+                    break;// TODO 正式抓时将这里删除
                 }
-//                break;// TODO 正式抓时将这里删除
+                break;// TODO 正式抓时将这里删除
             }
 
             Db::commit();
@@ -99,7 +99,7 @@ class IndexController extends BaseController
     private function grabMOOCLessonInfo($url)
     {
         $ql = QueryList::getInstance();
-        $ql->use(PhantomJs::class, 'D:\xampp\htdocs\lesson\runtime\phantomjs\phantomjs.exe');
+        $ql->use(PhantomJs::class, '/usr/phantomjs');
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -130,7 +130,7 @@ class IndexController extends BaseController
     private function grabMOOCComment($url)
     {
         $ql = QueryList::getInstance();
-        $ql->use(PhantomJs::class, 'D:\xampp\htdocs\lesson\runtime\phantomjs\phantomjs.exe');
+        $ql->use(PhantomJs::class, '/usr/phantomjs');
 
         //根据第一页，获取总页数
         $ch = curl_init();
