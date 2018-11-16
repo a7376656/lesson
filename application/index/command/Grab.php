@@ -28,9 +28,9 @@ class Grab extends Command
     protected function execute(Input $input, Output $output)
     {
         $indexController = new IndexController();
-//        $indexController->grabMOOC();
+        $result = $indexController->grabMOOC();
 
-        $output->writeln('ok');
+        $output->writeln($result['msg']);
     }
 }
 

@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\common\controller\BaseController;
+use app\common\controller\Constant;
 use app\index\model\CommentModel;
 use app\index\model\LessonModel;
 use QL\Ext\PhantomJs;
@@ -10,6 +11,9 @@ use think\Db;
 
 class IndexController extends BaseController
 {
+    const WINDOWS_PHANTOM_URL = 'D:\xampp\htdocs\lesson\runtime\phantomjs\phantomjs.exe';//windows上phantomjs地址
+    const LINUX_PHANTOM_URL = '/usr/phantomjs';//linux服务器上phantomjs地址
+
     /**
      * 默认显示
      */
@@ -19,7 +23,18 @@ class IndexController extends BaseController
     }
 
     /**
+     * 抓取入口
+     */
+    public function grab()
+    {
+        $result = $this->grabMOOC();
+
+        $this->ajaxReturn($result['code'], $result['msg'], $result['data']);
+    }
+
+    /**
      * 抓取慕课课程及评论
+     * @return array
      */
     public function grabMOOC()
     {
@@ -27,7 +42,7 @@ class IndexController extends BaseController
         $commentModel = new CommentModel();
 
         $ql = QueryList::getInstance();
-        $ql->use(PhantomJs::class, '/usr/phantomjs');
+        $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
 
         Db::startTrans();
         try {
@@ -85,10 +100,10 @@ class IndexController extends BaseController
             Db::commit();
         } catch (\Exception $e) {
             Db::rollback();
-            $this->ajaxReturn(1002, '抓取失败，请重试。'. '原因：'. $e->getMessage());
+            return return_array(1002, '抓取失败，请重试。'. '原因：'. $e->getMessage());
         }
 
-        $this->ajaxReturn(1000, 'ok');
+        return return_array(1000, 'ok');
     }
 
     /**
@@ -96,10 +111,10 @@ class IndexController extends BaseController
      * @param $url string 课程地址
      * @return mixed
      */
-    private function grabMOOCLessonInfo($url)
+    protected function grabMOOCLessonInfo($url)
     {
         $ql = QueryList::getInstance();
-        $ql->use(PhantomJs::class, '/usr/phantomjs');
+        $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -127,10 +142,10 @@ class IndexController extends BaseController
      * @param $lessonId int 课程ID
      * return array
      */
-    private function grabMOOCComment($url)
+    protected function grabMOOCComment($url)
     {
         $ql = QueryList::getInstance();
-        $ql->use(PhantomJs::class, '/usr/phantomjs');
+        $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
 
         //根据第一页，获取总页数
         $ch = curl_init();
