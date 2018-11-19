@@ -45,7 +45,7 @@ class IndexController extends BaseController
         Db::startTrans();
         try {
             //抓取前3页课程，一共90个。（每页30个，如果想抓120个则将3改为4）
-            for ($i = 1; $i <= 1; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 $url = 'https://www.imooc.com/course/list?sort=pop&page=' . $i;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -72,7 +72,7 @@ class IndexController extends BaseController
                         continue;
                     }
                     $count += 1;
-                    if ($count == 5) {
+                    if ($i == 1 && $count == 5) {
                         break;
                     }
                     //抓取课程信息，并存入数据库
@@ -93,9 +93,10 @@ class IndexController extends BaseController
                         /* TODO 如果想存入数据库，则将以下注释去了 */
                         $commentModel->addComment($value);
                     }
-//                    break;// TODO 正式抓时将这里注释
                 }
-//                break;// TODO 正式抓时将这里注释
+                if ($i == 1 && $count == 5) {
+                    break;
+                }
             }
 
             Db::commit();
