@@ -41,10 +41,11 @@ class IndexController extends BaseController
         $ql = QueryList::getInstance();
         $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
 
+        $count = 0;
         Db::startTrans();
         try {
             //抓取前3页课程，一共90个。（每页30个，如果想抓120个则将3改为4）
-            for ($i = 1; $i <= 3; $i++) {
+            for ($i = 1; $i <= 1; $i++) {
                 $url = 'https://www.imooc.com/course/list?sort=pop&page=' . $i;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -70,7 +71,10 @@ class IndexController extends BaseController
                     if ($result != 0) {
                         continue;
                     }
-
+                    $count += 1;
+                    if ($count == 5) {
+                        break;
+                    }
                     //抓取课程信息，并存入数据库
                     $data = $this->grabMOOCLessonInfo($info['url']);
                     $lessonInfo = array_merge($info, $data);
