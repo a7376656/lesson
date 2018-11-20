@@ -79,7 +79,7 @@ class IndexController extends BaseController
                     $data = $this->grabMOOCLessonInfo($info['url']);
                     $lessonInfo = array_merge($info, $data);
                     /* TODO 如果想存入数据库，则将以下注释去了 */
-//                    $lessonModel->addLesson($lessonInfo);
+                    $lessonModel->addLesson($lessonInfo);
 
                     //抓取课程评论，并存入数据库
                     $commentUrl = 'https://www.imooc.com/coursescore/' . $info['id'];
