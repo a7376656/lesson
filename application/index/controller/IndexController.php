@@ -79,7 +79,7 @@ class IndexController extends BaseController
                     $data = $this->grabMOOCLessonInfo($info['url']);
                     $lessonInfo = array_merge($info, $data);
                     /* TODO 如果想存入数据库，则将以下注释去了 */
-                    $lessonModel->addLesson($lessonInfo);
+//                    $lessonModel->addLesson($lessonInfo);
 
                     //抓取课程评论，并存入数据库
                     $commentUrl = 'https://www.imooc.com/coursescore/' . $info['id'];
@@ -132,7 +132,7 @@ class IndexController extends BaseController
             'difficulty' => ['div.course-infos div.static-item:first span.meta-value', 'html'],
             'totalTime' => ['div.course-infos div.static-item:eq(1) span.meta-value', 'html'],
             'comprehensiveScore' => ['div.course-infos div.static-item:eq(3) span.meta-value:first', 'html'],
-            'commentNum' => ['div.course-info-menu ul.course-menu li:last span', 'html'],
+            'commentNum' => ['div.course-info-menu ul.course-menu li:eq(3) span', 'html'],
         ])->query()->getData();
 
         return $html[0];
