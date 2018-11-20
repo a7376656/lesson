@@ -20,7 +20,7 @@ class IndexController extends BaseController
     }
 
     /**
-     * 默认显示
+     * 测试api
      */
     public function testApi()
     {
