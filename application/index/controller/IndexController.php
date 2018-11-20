@@ -20,6 +20,20 @@ class IndexController extends BaseController
     }
 
     /**
+     * 默认显示
+     */
+    public function testApi()
+    {
+        $data = [
+            'name' => 'Python教学',
+            'author' => 'Silence',
+            'price' => 999,
+        ];
+
+        $this->ajaxReturn(1000, 'ok', $data);
+    }
+
+    /**
      * 抓取入口
      */
     public function grab()
