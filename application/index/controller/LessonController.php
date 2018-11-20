@@ -19,6 +19,6 @@ class LessonController extends BaseController
         echo '你好';
     }
 
-    
+
 }
 

@@ -55,7 +55,7 @@ class IndexController extends BaseController
         $ql = QueryList::getInstance();
         $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
 
-        $count = 0;
+        $count = $now = 0;
         Db::startTrans();
         try {
             //抓取前3页课程，一共90个。（每页30个，如果想抓120个则将3改为4）
@@ -75,6 +75,7 @@ class IndexController extends BaseController
 
                 //循环每个课程
                 foreach ($html as $v) {
+                    $now += 1;
                     $info['studyNum'] = $v['studyNum'];
                     $info['id'] = explode('/', $v['url'])[2];//课程ID（慕课网上的ID）
                     $info['url'] = 'https://www.imooc.com' . $v['url'];//课程网址
@@ -86,7 +87,8 @@ class IndexController extends BaseController
                         continue;
                     }
                     $count += 1;
-                    if ($i == 1 && $count == 5) {
+                    //一次只抓五个
+                    if ($i == 1 && $count == 6) {
                         break;
                     }
                     //抓取课程信息，并存入数据库
@@ -107,8 +109,17 @@ class IndexController extends BaseController
                         /* TODO 如果想存入数据库，则将以下注释去了 */
                         $commentModel->addComment($value);
                     }
+                    //前十名课程一次只抓一个
+                    if (in_array($now, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
+                        break;
+                    }
                 }
-                if ($i == 1 && $count == 5) {
+                //一次只抓五个
+                if ($i == 1 && $count == 6) {
+                    break;
+                }
+                //前十名课程一次只抓一个
+                if (in_array($now, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
                     break;
                 }
             }
