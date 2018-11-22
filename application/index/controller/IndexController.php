@@ -90,7 +90,7 @@ class IndexController extends BaseController
                     }
                     $count += 1;
                     //一次只抓五个
-                    if ($i == 1 && $count == 6) {
+                    if ($count == 10) {
                         break;
                     }
                     //抓取课程信息，并存入数据库
@@ -117,7 +117,7 @@ class IndexController extends BaseController
                     }
                 }
                 //一次只抓五个
-                if ($i == 1 && $count == 6) {
+                if ($count == 10) {
                     break;
                 }
                 //前十名课程一次只抓一个
@@ -154,6 +154,7 @@ class IndexController extends BaseController
 
         $html = $ql->html($content)->rules([
             'name' => ['div#main h2.l', 'html'],
+            'author' => ['div.course-infos span.tit a', 'html'],
             'introduction' => ['div.content div.course-description', 'html'],
             'curriculumClassification' => ['div.course-infos div.path a:eq(1)', 'html'],
             'difficulty' => ['div.course-infos div.static-item:first span.meta-value', 'html'],

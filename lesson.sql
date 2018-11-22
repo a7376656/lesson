@@ -1,8 +1,9 @@
 /*
 SQLyog Ultimate v12.09 (64 bit)
-MySQL - 10.1.33-MariaDB : Database - lesson
+MySQL - 5.5.54-log : Database - lesson
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -27,6 +28,10 @@ CREATE TABLE `l_classification` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='分类表';
 
+/*Data for the table `l_classification` */
+
+insert  into `l_classification`(`id`,`name`,`isDeleted`) values (1,'前沿技术',0),(2,'前端开发',0),(3,'后端开发',0),(4,'移动开发',0),(5,'算法&数学',0),(6,'云计算&大数据',0),(7,'运维&测试',0),(8,'数据库',0),(9,'UI设计&多媒体',0),(10,'游戏',0);
+
 /*Table structure for table `l_comment` */
 
 DROP TABLE IF EXISTS `l_comment`;
@@ -38,7 +43,7 @@ CREATE TABLE `l_comment` (
   `lessonId` int(11) NOT NULL DEFAULT '0' COMMENT '对应的课程ID',
   `grabTime` datetime NOT NULL COMMENT '抓取时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=245218 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=199896 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `l_lesson` */
 
@@ -70,6 +75,17 @@ CREATE TABLE `l_users` (
   `createTime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `test` */
+
+DROP TABLE IF EXISTS `test`;
+
+CREATE TABLE `test` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `msg` varchar(10) NOT NULL COMMENT '内容',
+  `createTime` datetime NOT NULL COMMENT '时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
