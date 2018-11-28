@@ -9,7 +9,7 @@ use QL\Ext\PhantomJs;
 use QL\QueryList;
 use think\Db;
 
-header('Access-Control-Allow-Origin: http://localhost:8081');
+header('Access-Control-Allow-Origin: http://localhost:8080');
 
 class IndexController extends BaseController
 {
