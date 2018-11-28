@@ -19,6 +19,14 @@ class LessonController extends BaseController
         echo '你好';
     }
 
+    public function getFreeLastSevenDayInfo()
+    {
+        $lessonModel = new LessonModel();
 
+        $today = date('Y-m-d');//今天日期
+        $sevenAgo = date('Y-m-d', strtotime('-6 days'));//7天前（因为包括今天所以是-6）
+
+        
+    }
 }
 
