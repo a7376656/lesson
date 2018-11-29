@@ -54,4 +54,15 @@ class LessonModel extends Model
     {
         return $this->where($where)->field($field)->find();
     }
+
+    /**
+     * 根据条件获取课程列表
+     * @param $where array 条件
+     * @param $field string 字段
+     * @return array
+     */
+    public function getLessonListByWhere($where = [], $field = '*')
+    {
+        return $this->where($where)->field($field)->select()->toArray();
+    }
 }

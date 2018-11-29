@@ -42,4 +42,15 @@ class PayLessonModel extends Model
     {
         return $this->column('id');
     }
+
+    /**
+     * 根据条件获取课程列表
+     * @param $where array 条件
+     * @param $field string 字段
+     * @return array
+     */
+    public function getLessonListByWhere($where = [], $field = '*')
+    {
+        return $this->where($where)->field($field)->select()->toArray();
+    }
 }
