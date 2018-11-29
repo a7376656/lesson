@@ -13,4 +13,7 @@ class Constant
     const WINDOWS_PHANTOM_URL = 'D:\xampp\htdocs\lesson\runtime\phantomjs\phantomjs.exe';//windows
     const LINUX_PHANTOM_URL = '/usr/phantomjs';//linux
 
+    //课程类型
+    const FREE_LESSON = 1;//免费课程
+    const PAY_LESSON = 2;//付费课程
 }

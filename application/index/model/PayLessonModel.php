@@ -12,6 +12,7 @@ use think\Model;
 class PayLessonModel extends Model
 {
     protected $table = 'l_pay_lesson';
+    protected $resultSetType = 'collection';
 
     /**
      * 添加课程
@@ -31,5 +32,14 @@ class PayLessonModel extends Model
     public function getLessonCount($where = [])
     {
         return $this->where($where)->count();
+    }
+
+    /**
+     * 获取所有课程的id
+     * @return array
+     */
+    public function getAllLessonIds()
+    {
+        return $this->column('id');
     }
 }

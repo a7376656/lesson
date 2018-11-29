@@ -5,6 +5,7 @@ use app\common\controller\BaseController;
 use app\common\controller\Constant;
 use app\index\model\CommentModel;
 use app\index\model\LessonModel;
+use app\index\model\TimeLineModel;
 use QL\Ext\PhantomJs;
 use QL\QueryList;
 use think\Db;
@@ -22,6 +23,7 @@ class LessonController extends BaseController
     public function getFreeLastSevenDayInfo()
     {
         $lessonModel = new LessonModel();
+        $timeLineModel = new TimeLineModel();
 
         $today = date('Y-m-d');//今天日期
         $sevenAgo = date('Y-m-d', strtotime('-6 days'));//7天前（因为包括今天所以是-6）
