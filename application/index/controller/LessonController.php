@@ -33,6 +33,50 @@ class LessonController extends BaseController
         $sevenAgo = date('Y-m-d', strtotime('-6 days'));//7天前（因为包括今天所以是-6）
 
         //未写完
+        $result = [];
+        $result = [
+            [
+                "name"=>"基于Spring Boot技术栈博客系统企业级前后端实战",
+                "rate"=>"300"
+            ],
+            [
+                "name"=>"Python接口自动化测试框架实战",
+                "rate"=>"266"
+            ],
+            [
+                "name"=>"SpringBoot 仿抖音短视频小程序开发 全栈式实战项目",
+                "rate"=>"243"
+            ],
+            [
+                "name"=>"Python Flask高级编程",
+                "rate"=>"201"
+            ],
+            [
+                "name"=>"微信小游戏入门与实战 刷爆朋友圈",
+                "rate"=>"177"
+            ],
+            [
+                "name"=>"Java秒杀系统方案优化 高性能高并发实战",
+                "rate"=>"135"
+            ],
+            [
+                "name"=>"纯正商业级应用-微信小程序开发实战",
+                "rate"=>"99"
+            ],
+            [
+                "name"=>"微信小程序商城构建全栈应用",
+                "rate"=>"23"
+            ],
+            [
+                "name"=>"Vue2.5开发去哪儿网App 从零基础入门到实战项目",
+                "rate"=>"21"
+            ],
+            [
+                "name"=>"手把手开发一个完整即时通讯APP",
+                "rate"=>"20"
+            ]
+        ];
+        $this->ajaxReturn(1000, 'ok', $result);
     }
 
     /**
@@ -41,7 +85,6 @@ class LessonController extends BaseController
     public function freeCourseOverview()
     {
         $lessonModel = new LessonModel();
-
         $result = [];
         //每个分类下 各个评分段的课程数量 评分段为['<8', '8-8.4', '8.5-8.9', '9-9.4', '9.5-9.7', '9.8-10']
         $result['grade'] = [
@@ -89,7 +132,7 @@ class LessonController extends BaseController
                 ],
             ]
         ];
-        //返回每个分类下 各个时长段的课程数量 时长段为（左开右闭）['<1','1-3', '3-6', '6-10', '10-15','15-20','20-30',>=30]
+        //每个分类下 各个时长段的课程数量 时长段为（左开右闭）['<1','1-3', '3-6', '6-10', '10-15','15-20','20-30',>=30]
         $result['duration'] = [
             "title" => "时长数据分布",
             "category" => [
@@ -135,7 +178,7 @@ class LessonController extends BaseController
                 ],
             ]
         ];
-        //返回每个分类下 各个评分段的课程数量 难度段为['入门', '初级', '中级', '高级']
+        //每个分类下 各个评分段的课程数量 难度段为['入门', '初级', '中级', '高级']
         $result['difficulty'] = [
             "title" => "难度等级分布",
             "category" => [
@@ -238,7 +281,7 @@ class LessonController extends BaseController
                 ],
             ]
         ];
-        //返回每个分类下 各个时长段的课程数量 时长段为（左开右闭）['<1','1-3', '3-6', '6-10', '10-15','15-20','20-30',>=30]
+        //每个分类下 各个时长段的课程数量 时长段为（左开右闭）['<1','1-3', '3-6', '6-10', '10-15','15-20','20-30',>=30]
         $result['duration'] = [
             "title" => "时长数据分布",
             "category" => [
@@ -284,7 +327,7 @@ class LessonController extends BaseController
                 ],
             ]
         ];
-        //返回每个分类下 各个评分段的课程数量 难度段为['入门', '初级', '中级', '高级']
+        //每个分类下 各个评分段的课程数量 难度段为['入门', '初级', '中级', '高级']
         $result['difficulty'] = [
             "title" => "难度等级分布",
             "category" => [
@@ -332,7 +375,6 @@ class LessonController extends BaseController
         ];
         $this->ajaxReturn(1000, 'ok', $result);
     }
-
     /**
      * 获取超过10万学习人数的免费课程列表
      */
