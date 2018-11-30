@@ -9,9 +9,9 @@ namespace app\index\model;
 
 use think\Model;
 
-class LessonModel extends Model
+class PayLessonModel extends Model
 {
-    protected $table = 'l_lesson';
+    protected $table = 'l_pay_lesson';
     protected $resultSetType = 'collection';
 
     /**
@@ -41,18 +41,6 @@ class LessonModel extends Model
     public function getAllLessonIds()
     {
         return $this->column('id');
-    }
-
-    /**
-     * 根据条件获取某个课程信息
-     * @author wenjie.lei
-     * @param array $where
-     * @param string $field
-     * @return array|false|\PDOStatement|string|Model
-     */
-    public function getLessonInfoByWhere($where = [], $field = '*')
-    {
-        return $this->where($where)->field($field)->find();
     }
 
     /**

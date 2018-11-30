@@ -12,11 +12,11 @@ use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 
-class Grab extends Command
+class GrabPay extends Command
 {
     protected function configure()
     {
-        $this->setName('grab')->setDescription('抓取慕课免费课程及评论');
+        $this->setName('grabPay')->setDescription('抓取慕课付费课程及评论');
     }
 
     /**
@@ -28,7 +28,7 @@ class Grab extends Command
     protected function execute(Input $input, Output $output)
     {
         $indexController = new IndexController();
-        $result = $indexController->grabMOOC();
+        $result = $indexController->grabPayLesson();
 
         $output->writeln($result['msg']);
     }
