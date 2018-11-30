@@ -40,6 +40,7 @@ class AddUpPayStudyNum extends Command
 
         $yesterday = date('Y-m-d', strtotime('yesterday'));//昨天日期
         $twoDaysAgo = date('Y-m-d', strtotime('-2 days'));//前天日期，计算增长率
+        $sevenDaysAgo = date('Y-m-d', strtotime('-7 days'));//上周日期，计算增长率
 
         $ql = QueryList::getInstance();
         $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
@@ -77,6 +78,8 @@ class AddUpPayStudyNum extends Command
                     ], 'todayNum')['todayNum'];
                     //计算增长率
                     $info['rate'] = sprintf('%.7f', ($info['todayNum'] - $twoDaysAgoNum) / $twoDaysAgoNum);
+                    //直接计算增长人数吧，增长率数值太小了
+                    $info['rate'] = $info['todayNum'] - $twoDaysAgoNum;
                     //判断数据库中是否已有当天的数据
                     $result = $timeLineModel->getInfoByWhere([
                         'id' => $info['id'],
