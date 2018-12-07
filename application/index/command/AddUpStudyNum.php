@@ -39,7 +39,7 @@ class AddUpStudyNum extends Command
         $freeLessonIds = $lessonModel->getAllLessonIds();//获取所有课程id
 
         $yesterday = date('Y-m-d', strtotime('yesterday'));//昨天日期
-        $twoDaysAgo = date('Y-m-d', strtotime('-2 days'));//前天日期，计算增长率
+        $sevenDaysAgo = date('Y-m-d', strtotime('-7 days'));//昨天的七天前日期
 
         $ql = QueryList::getInstance();
         $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
@@ -69,14 +69,14 @@ class AddUpStudyNum extends Command
                 ];
 
                 if (in_array($info['id'], $freeLessonIds)) {
-                    //获取前天的学习人数
-                    $twoDaysAgoNum = $timeLineModel->getInfoByWhere([
+                    //获取七天前的学习人数
+                    $sevenDaysAgoNum = $timeLineModel->getInfoByWhere([
                         'id' => $info['id'],
-                        'date' => $twoDaysAgo,
+                        'date' => $sevenDaysAgo,
                         'flag' => Constant::FREE_LESSON,
                     ], 'todayNum')['todayNum'];
                     //计算增长率
-                    $info['rate'] = sprintf('%.7f', ($info['todayNum'] - $twoDaysAgoNum) / $twoDaysAgoNum);
+                    $info['rate'] = $info['todayNum'] - $sevenDaysAgoNum;
                     //判断数据库中是否已有当天的数据
                     $result = $timeLineModel->getInfoByWhere([
                         'id' => $info['id'],

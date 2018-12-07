@@ -53,4 +53,24 @@ class PayLessonModel extends Model
     {
         return $this->where($where)->field($field)->select()->toArray();
     }
+
+    /**
+     * 更新信息
+     * @param $where array 条件
+     * @param $update array 更新语句
+     * @return LessonModel
+     */
+    public function updateInfo($where = [], $update)
+    {
+        return $this->where($where)->update($update);
+    }
+
+    /**
+     * 获取所有课程评论总数
+     * @return float|int
+     */
+    public function getTotalCommentNum()
+    {
+        return $this->sum('commentNum');
+    }
 }
