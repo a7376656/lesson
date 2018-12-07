@@ -47,7 +47,7 @@ class AddUpStudyNum extends Command
 
         Db::startTrans();
         try {
-            for ($i = 1; $i < 5; $i++) {
+            for ($i = 1; $i < 6; $i++) {
                 $url = 'https://www.imooc.com/course/list?sort=pop&page=' . $i;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
