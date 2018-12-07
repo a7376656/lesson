@@ -6,4 +6,5 @@ return [
     'app\index\command\AddUpStudyNum',//统计昨天一整天免费课程学习人数
     'app\index\command\AddUpPayStudyNum',//统计昨天一整天付费课程学习人数
     'app\index\command\Clear',//清除数据库课程与评论内容
+    'app\index\command\CalculationRank',//统计昨天为止同类下的学习人数名次、评论人数名次、评分名次
 ];

@@ -12,6 +12,7 @@ use think\Model;
 class AuthorModel extends Model
 {
     protected $table = 'l_author';
+    protected $resultSetType = 'collection';
 
     /**
      * 一次性添加多个作者
@@ -31,5 +32,13 @@ class AuthorModel extends Model
     public function getAuthorCount($where = [])
     {
         return $this->where($where)->count();
+    }
+
+    /**
+     * 获取人气最高的10个讲师
+     */
+    public function getHotAuthor()
+    {
+        return $this->order('fans desc')->limit(10)->select()->toArray();
     }
 }

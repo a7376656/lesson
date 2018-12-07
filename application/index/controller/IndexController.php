@@ -684,9 +684,9 @@ class IndexController extends BaseController
 
         $ids = $payCommentModel->column('id');
 
-        $ids = array_rand($ids, 24);
+        $ids = array_rand($ids, 29);
 
-        $result = $payCommentModel->where(['id' => ['in', $ids]])->update(['score' => 5]);
+        $result = $payCommentModel->where(['id' => ['in', $ids]])->update(['score' => 0]);
 //        $result = $payCommentModel->where(['id' => ['lt', 1000000]])->update(['score' => 10]);
         if ($result !== false) {
             return true;

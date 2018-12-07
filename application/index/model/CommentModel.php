@@ -12,6 +12,7 @@ use think\Model;
 class CommentModel extends Model
 {
     protected $table = 'l_comment';
+    protected $resultSetType = 'collection';
 
     /**
      * 添加评论
@@ -31,5 +32,15 @@ class CommentModel extends Model
     public function getCommentCount($where = [])
     {
         return $this->where($where)->count();
+    }
+
+    /**
+     * 根据条件获取评论数量
+     * @param array $where
+     * @return int|string
+     */
+    public function getCommentListByWhere($where = [], $field = '*')
+    {
+        return $this->where($where)->field($field)->select()->toArray();
     }
 }

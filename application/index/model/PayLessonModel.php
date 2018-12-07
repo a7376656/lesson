@@ -7,6 +7,7 @@
  */
 namespace app\index\model;
 
+use app\common\controller\Constant;
 use think\Model;
 
 class PayLessonModel extends Model
@@ -72,5 +73,21 @@ class PayLessonModel extends Model
     public function getTotalCommentNum()
     {
         return $this->sum('commentNum');
+    }
+
+    /**
+     * 获取课程详情
+     * @param $id int 课程id
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function getLessonDetail($id)
+    {
+        return $this->alias('a')->where([
+            'a.id' => $id,
+            'b.date' => date('Y-m-d', strtotime('yesterday')),//昨天日期
+            'b.flag' => Constant::PAY_LESSON,
+        ])->field('a.*,b.rate')
+            ->join('l_time_line b', 'a.id=b.id', 'LEFT')
+            ->find()->toArray();
     }
 }
