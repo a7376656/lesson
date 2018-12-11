@@ -77,6 +77,13 @@ class LessonController extends BaseController
             $gradeArray[] = $lessonModel->getLessonCount(['curriculumClassification' => $v, 'comprehensiveScore' => [['>=', 9], ['<', 9.5]]]);
             $gradeArray[] = $lessonModel->getLessonCount(['curriculumClassification' => $v, 'comprehensiveScore' => [['>=', 9.5], ['<', 10]]]);
             $gradeArray[] = $lessonModel->getLessonCount(['curriculumClassification' => $v, 'comprehensiveScore' => ['>=', 10]]);
+            $sum = 0;
+            foreach ($gradeArray as $value) {
+                $sum += $value;
+            }
+            if ($sum == 0) {
+                continue;
+            }
             //赋值
             $data['grade']['category'][] = [
                 'name' => $v,
@@ -139,6 +146,13 @@ class LessonController extends BaseController
                         break;
                 }
             }
+            $sum = 0;
+            foreach ($durationArray as $value) {
+                $sum += $value;
+            }
+            if ($sum == 0) {
+                continue;
+            }
             //赋值
             $data['duration']['category'][] = [
                 'name' => $v,
@@ -174,6 +188,13 @@ class LessonController extends BaseController
             $difficultyArray[] = $lessonModel->getLessonCount(['curriculumClassification' => $v, 'difficulty' => '初级']);
             $difficultyArray[] = $lessonModel->getLessonCount(['curriculumClassification' => $v, 'difficulty' => '中级']);
             $difficultyArray[] = $lessonModel->getLessonCount(['curriculumClassification' => $v, 'difficulty' => '高级']);
+            $sum = 0;
+            foreach ($difficultyArray as $value) {
+                $sum += $value;
+            }
+            if ($sum == 0) {
+                continue;
+            }
             //赋值
             $data['difficulty']['category'][] = [
                 'name' => $v,
@@ -212,6 +233,13 @@ class LessonController extends BaseController
             $gradeArray[] = $payLessonModel->getLessonCount(['curriculumClassification' => $v, 'comprehensiveScore' => [['>=', 9], ['<', 9.5]]]);
             $gradeArray[] = $payLessonModel->getLessonCount(['curriculumClassification' => $v, 'comprehensiveScore' => [['>=', 9.5], ['<', 10]]]);
             $gradeArray[] = $payLessonModel->getLessonCount(['curriculumClassification' => $v, 'comprehensiveScore' => ['>=', 10]]);
+            $sum = 0;
+            foreach ($gradeArray as $value) {
+                $sum += $value;
+            }
+            if ($sum == 0) {
+                continue;
+            }
             //赋值
             $data['grade']['category'][] = [
                 'name' => $v,
@@ -274,6 +302,13 @@ class LessonController extends BaseController
                         break;
                 }
             }
+            $sum = 0;
+            foreach ($durationArray as $value) {
+                $sum += $value;
+            }
+            if ($sum == 0) {
+                continue;
+            }
             //赋值
             $data['duration']['category'][] = [
                 'name' => $v,
@@ -309,6 +344,13 @@ class LessonController extends BaseController
             $difficultyArray[] = $payLessonModel->getLessonCount(['curriculumClassification' => $v, 'difficulty' => '初级']);
             $difficultyArray[] = $payLessonModel->getLessonCount(['curriculumClassification' => $v, 'difficulty' => '中级']);
             $difficultyArray[] = $payLessonModel->getLessonCount(['curriculumClassification' => $v, 'difficulty' => '高级']);
+            $sum = 0;
+            foreach ($difficultyArray as $value) {
+                $sum += $value;
+            }
+            if ($sum == 0) {
+                continue;
+            }
             //赋值
             $data['difficulty']['category'][] = [
                 'name' => $v,
@@ -557,342 +599,85 @@ class LessonController extends BaseController
     }
 
     /**
-     * 课程搜索
+     * 获取分类列表
      */
+    public function getLessonClass()
+    {
+        $classificationModel = new ClassificationModel();
 
-    public function getLessonClass(){
         //课程分类信息返回
-        $result = [
-            [
-                "id"=>"1",
-                "name"=>"前沿技术"
-            ],
-            [
-                "id"=>"2",
-                "name"=>"前端开发"
-            ],
-            [
-                "id"=>"3",
-                "name"=>"后端开发"
-            ],
-            [
-                "id"=>"4",
-                "name"=>"移动端开发"
-            ],
-            //不想一个个写了
-            [
-                "id"=>"10",
-                "name"=>"游戏"
-            ],
-        ];
+        $result = $classificationModel->getList(['isDeleted' => 0], 'id,name');
+
         $this->ajaxReturn(1000, 'ok', $result);
     }
+
+    /**
+     * 课程搜索
+     */
     public function searchLessonResult()
     {
-        $result = [];
-        $result = [
-            [
-                "name" => "Vue2.5开发去哪儿网App 从零基础入门到实战项目",
-                "timeLine" => [
-                    "2018-11-27" => 160,
-                    "2018-11-28" => 100,
-                    "2018-11-29" => 400,
-                    "2018-11-30" => 355,
-                    "2018-12-01" => 266,
-                    "2018-12-02" => 121,
-                    "2018-12-03" => 60
-                ],
-                "id" => 6,
-                "author" => "江老实",
-                "introduction" => "简介：每个网站都包含导航菜单，它们形式多样。本课程将由浅到深的介绍各种常见的导航条菜单的制作方法，从垂直方向的到水平方向的，再到用CSS样式的圆角导航条，最后讲解动态交互功能且具有拉伸效果的导航条菜单，对比着学习以上内容让您的技术探索之路更高效！",
-                "curriculumClassification" => "前端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "0小时23分",
-                "studyNum" => 118371,
-                "commentNum" => 987,
-                "comprehensiveScore" => "9.50",
-                "url" => "https//:www.imooc.com/learn/6",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>54"
-            ],
-            [
-                "name" => "手把手开发一个完整即时通讯APP",
-                "timeLine" => [
-                    "2018-11-27" => 200,
-                    "2018-11-28" => 300,
-                    "2018-11-29" => 100,
-                    "2018-11-30" => 155,
-                    "2018-12-01" => 166,
-                    "2018-12-02" => 321,
-                    "2018-12-03" => 400
-                ],
-                "id" => 161,
-                "author" => "汤小洋",
-                "introduction" => "简介：网络无处不在，移动互联时代也早已到来，单机版程序慢慢的已没有生命力，所有的程序都要能够访问网络，比如 QQ 网络聊天程序、迅雷下载程序等，这些程序都要同网络打交道，本次将与各位小伙伴们分享的就是 Java 中的网络编程—— Socket 通信",
-                "curriculumClassification" => "后端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "2小时 0分",
-                "studyNum" => 113511,
-                "commentNum" => 471,
-                "comprehensiveScore" => "9.80",
-                "url" => "https://www.imooc.com/learn/161",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>56"
-            ],
-            [
-                "name" => "前端跳槽必备 揭秘一线互联网公司高级前端JavaScript面试",
-                "timeLine" => [
-                    "2018-11-27" => 270,
-                    "2018-11-28" => 309,
-                    "2018-11-29" => 170,
-                    "2018-11-30" => 105,
-                    "2018-12-01" => 106,
-                    "2018-12-02" => 351,
-                    "2018-12-03" => 310
-                ],
-                "id" => 36,
-                "author" => "慕课官方号...",
-                "introduction" => "简介：本教程让您快速认识JavaScript，熟悉JavaScript基本语法、窗口交互方法和通过DOM进行网页元素的操作，学会如何编写JS代码，如何运用JavaScript去操作HTML元素和CSS样式，本JavaScript教程分为四个章节，能够让您快速入门，为JavaScript深入学习打下基础。",
-                "curriculumClassification" => "前端开发",
-                "difficulty" => "入门",
-                "price" => "0.00",
-                "totalTime" => "1小时35分",
-                "studyNum" => 611147,
-                "commentNum" => 5220,
-                "comprehensiveScore" => "9.60",
-                "url" => "http://www.imooc.com/learn/36",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>12"
+        $params = input('get.');
 
-            ],
-            [
-                "name" => "四大维度解锁 Webpack 前端工程化",
-                "timeLine" => [
-                    "2018-11-27" => 230,
-                    "2018-11-28" => 300,
-                    "2018-11-29" => 160,
-                    "2018-11-30" => 135,
-                    "2018-12-01" => 156,
-                    "2018-12-02" => 321,
-                    "2018-12-03" => 100
-                ],
-                "id" => 26,
-                "author" => "Jason",
-                "introduction" => "简介：通过PHP学习的进阶篇的学习，你可以对PHP的理论知识由浅入深有更深一步的掌握，这些知识能够使您更加全面的掌握PHP，从而助您在实际工作中使用PHP快速开发网站程序。",
-                "curriculumClassification" => "后端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "9小时28分",
-                "studyNum" => 162000,
-                "commentNum" => 550,
-                "comprehensiveScore" => "8.90",
-                "url" => "http://www.imooc.com/learn/26",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>40"
-            ],
-            [
-                "name" => "玩转数据结构 从入门到进阶",
-                "timeLine" => [
-                    "2018-11-27" => 203,
-                    "2018-11-28" => 303,
-                    "2018-11-29" => 103,
-                    "2018-11-30" => 135,
-                    "2018-12-01" => 166,
-                    "2018-12-02" => 321,
-                    "2018-12-03" => 300
-                ],
-                "id" => 26,
-                "author" => "Jason",
-                "introduction" => "简介：通过PHP学习的进阶篇的学习，你可以对PHP的理论知识由浅入深有更深一步的掌握，这些知识能够使您更加全面的掌握PHP，从而助您在实际工作中使用PHP快速开发网站程序。",
-                "curriculumClassification" => "后端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "9小时28分",
-                "studyNum" => 162000,
-                "commentNum" => 550,
-                "comprehensiveScore" => "8.90",
-                "url" => "http://www.imooc.com/learn/26",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>40"
-            ],
-            [
-                "name" => "Google资深工程师深度讲解Go语言",
-                "timeLine" => [
-                    "2018-11-27" => 230,
-                    "2018-11-28" => 330,
-                    "2018-11-29" => 103,
-                    "2018-11-30" => 153,
-                    "2018-12-01" => 136,
-                    "2018-12-02" => 331,
-                    "2018-12-03" => 430
-                ],
-                "id" => 33,
-                "author" => "大漠",
-                "introduction" => "简介：本课程为CSS3教程，对于有一定CSS2经验的伙伴，能让您系统的学习CSS3，快速的理解掌握并应用于工作之中。在学习教程的过程中实例演示结合在线编程完成任务的方式来学习，相信自己动手会让你理解的更快，本教程能够让您学习效果更好！",
-                "curriculumClassification" => "前端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "5小时 0分",
-                "studyNum" => 205535,
-                "commentNum" => 456,
-                "comprehensiveScore" => "9.40",
-                "url" => "http://www.imooc.com/learn/33",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>30"
-            ],
-            [
-                "name" => "React 16.4 开发简书项目 从零基础入门到实战",
-                "timeLine" => [
-                    "2018-11-27" => 300,
-                    "2018-11-28" => 200,
-                    "2018-11-29" => 200,
-                    "2018-11-30" => 125,
-                    "2018-12-01" => 166,
-                    "2018-12-02" => 221,
-                    "2018-12-03" => 400
-                ],
-                "id" => 36,
-                "author" => "慕课官方号...",
-                "introduction" => "简介：本教程让您快速认识JavaScript，熟悉JavaScript基本语法、窗口交互方法和通过DOM进行网页元素的操作，学会如何编写JS代码，如何运用JavaScript去操作HTML元素和CSS样式，本JavaScript教程分为四个章节，能够让您快速入门，为JavaScript深入学习打下基础。",
-                "curriculumClassification" => "前端开发",
-                "difficulty" => "入门",
-                "price" => "0.00",
-                "totalTime" => "1小时35分",
-                "studyNum" => 611147,
-                "commentNum" => 5220,
-                "comprehensiveScore" => "9.60",
-                "url" => "http://www.imooc.com/learn/36",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>12"
-            ],
-            [
-                "name" => "Kotlin打造完整电商APP 模块化+MVP+主流框架",
-                "timeLine" => [
-                    "2018-11-27" => 240,
-                    "2018-11-28" => 340,
-                    "2018-11-29" => 150,
-                    "2018-11-30" => 155,
-                    "2018-12-01" => 166,
-                    "2018-12-02" => 341,
-                    "2018-12-03" => 410
-                ],
-                "id" => 26,
-                "author" => "Jason",
-                "introduction" => "简介：通过PHP学习的进阶篇的学习，你可以对PHP的理论知识由浅入深有更深一步的掌握，这些知识能够使您更加全面的掌握PHP，从而助您在实际工作中使用PHP快速开发网站程序。",
-                "curriculumClassification" => "后端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "9小时28分",
-                "studyNum" => 162000,
-                "commentNum" => 550,
-                "comprehensiveScore" => "8.90",
-                "url" => "http://www.imooc.com/learn/26",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>40"
-            ],
-            [
-                "name" => "快速上手Linux 玩转典型应用",
-                "timeLine" => [
-                    "2018-11-27" => 20,
-                    "2018-11-28" => 30,
-                    "2018-11-29" => 100,
-                    "2018-11-30" => 105,
-                    "2018-12-01" => 106,
-                    "2018-12-02" => 301,
-                    "2018-12-03" => 420
-                ],
-                "id" => 161,
-                "author" => "汤小洋",
-                "introduction" => "简介：网络无处不在，移动互联时代也早已到来，单机版程序慢慢的已没有生命力，所有的程序都要能够访问网络，比如 QQ 网络聊天程序、迅雷下载程序等，这些程序都要同网络打交道，本次将与各位小伙伴们分享的就是 Java 中的网络编程—— Socket 通信",
-                "curriculumClassification" => "后端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "2小时 0分",
-                "studyNum" => 113511,
-                "commentNum" => 471,
-                "comprehensiveScore" => "9.80",
-                "url" => "https://www.imooc.com/learn/161",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>56"
-            ],
-            [
-                "name" => "韩天峰力荐 Swoole入门到实战打造高性能赛事直播平台",
-                "timeLine" => [
-                    "2018-11-27" => 200,
-                    "2018-11-28" => 300,
-                    "2018-11-29" => 120,
-                    "2018-11-30" => 195,
-                    "2018-12-01" => 236,
-                    "2018-12-02" => 381,
-                    "2018-12-03" => 400
-                ],
-                "id" => 12,
-                "author" => "zongran",
-                "introduction" => "简介：本课程从易到难，循循渐进，从静态网页布局，到运用HTML/CSS、JavaScript、jQuery不同技术实现动态下拉菜单，让您掌握下拉菜单的制作及在不同浏览器间进行代码调试，解决浏览器兼容问题。",
-                "curriculumClassification" => "前端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "3小时21分",
-                "studyNum" => 102238,
-                "commentNum" => 138,
-                "comprehensiveScore" => "9.60",
-                "url" => "http://www.imooc.com/learn/12",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>47=>20"
-            ],
-            [
-                "name" => "前端面试项目冲刺，京东金融Vue组件化实战",
-                "timeLine" => [
-                    "2018-11-27" => 270,
-                    "2018-11-28" => 390,
-                    "2018-11-29" => 200,
-                    "2018-11-30" => 145,
-                    "2018-12-01" => 116,
-                    "2018-12-02" => 301,
-                    "2018-12-03" => 210
-                ],
-                "id" => 26,
-                "author" => "Jason",
-                "introduction" => "简介：通过PHP学习的进阶篇的学习，你可以对PHP的理论知识由浅入深有更深一步的掌握，这些知识能够使您更加全面的掌握PHP，从而助您在实际工作中使用PHP快速开发网站程序。",
-                "curriculumClassification" => "后端开发",
-                "difficulty" => "初级",
-                "price" => "0.00",
-                "totalTime" => "9小时28分",
-                "studyNum" => 162000,
-                "commentNum" => 550,
-                "comprehensiveScore" => "8.90",
-                "url" => "http://www.imooc.com/learn/26",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>40"
-            ],
-            [
-                "name" => "Spring Cloud微服务实战",
-                "timeLine" => [
-                    "2018-11-27" => 200,
-                    "2018-11-28" => 380,
-                    "2018-11-29" => 90,
-                    "2018-11-30" => 155,
-                    "2018-12-01" => 106,
-                    "2018-12-02" => 321,
-                    "2018-12-03" => 400
-                ],
-                "id" => 36,
-                "author" => "慕课官方号...",
-                "introduction" => "简介：本教程让您快速认识JavaScript，熟悉JavaScript基本语法、窗口交互方法和通过DOM进行网页元素的操作，学会如何编写JS代码，如何运用JavaScript去操作HTML元素和CSS样式，本JavaScript教程分为四个章节，能够让您快速入门，为JavaScript深入学习打下基础。",
-                "curriculumClassification" => "前端开发",
-                "difficulty" => "入门",
-                "price" => "0.00",
-                "totalTime" => "1小时35分",
-                "studyNum" => 611147,
-                "commentNum" => 5220,
-                "comprehensiveScore" => "9.60",
-                "url" => "http://www.imooc.com/learn/36",
-                "authorUrl" => "",
-                "grabTime" => "2018-11-29 00=>46=>12"
-            ],
-        ];
+        $validate = new LessonValidate();
+        if (!$validate->scene('searchLessonResult')->check($params)) {
+            $this->ajaxReturn($validate->getError());
+        }
+
+        $lessonModel = new LessonModel();
+        $timeLineModel = new TimeLineModel();
+        $payLessonModel = new PayLessonModel();
+
+        //查询条件
+        $where = [];
+        if (isset($params['type'])) {
+            $where['curriculumClassification'] = $params['type'];
+        }
+        if (isset($params['filter'])) {
+            $where['name'] = ['like', '%'. $params['filter'] .'%'];
+        }
+
+        switch ($params['flag']) {
+            case Constant::FREE_LESSON:
+                $result = $lessonModel->getLessonListByWhere($where, 'id,name,author,introduction,curriculumClassification,difficulty,price,totalTime,studyNum,commentNum,comprehensiveScore,url,authorUrl,grabTime');
+                break;
+            case Constant::PAY_LESSON:
+                $result = $payLessonModel->getLessonListByWhere($where, 'id,name,author,introduction,curriculumClassification,difficulty,price,totalTime,studyNum,commentNum,comprehensiveScore,url,authorUrl,grabTime');
+                break;
+        }
+
+        foreach ($result as &$v) {
+            $v['timeLine'] = [
+                date('Y-m-d', strtotime('-7 days')) => $timeLineModel->getInfoByWhere([
+                    'date' => date('Y-m-d', strtotime('-7 days')),
+                    'flag' => $params['flag'],
+                ], 'todayNum')['todayNum'],
+                date('Y-m-d', strtotime('-6 days')) => $timeLineModel->getInfoByWhere([
+                    'date' => date('Y-m-d', strtotime('-6 days')),
+                    'flag' => $params['flag'],
+                ], 'todayNum')['todayNum'],
+                date('Y-m-d', strtotime('-5 days')) => $timeLineModel->getInfoByWhere([
+                    'date' => date('Y-m-d', strtotime('-5 days')),
+                    'flag' => $params['flag'],
+                ], 'todayNum')['todayNum'],
+                date('Y-m-d', strtotime('-4 days')) => $timeLineModel->getInfoByWhere([
+                    'date' => date('Y-m-d', strtotime('-4 days')),
+                    'flag' => $params['flag'],
+                ], 'todayNum')['todayNum'],
+                date('Y-m-d', strtotime('-3 days')) => $timeLineModel->getInfoByWhere([
+                    'date' => date('Y-m-d', strtotime('-3 days')),
+                    'flag' => $params['flag'],
+                ], 'todayNum')['todayNum'],
+                date('Y-m-d', strtotime('-2 days')) => $timeLineModel->getInfoByWhere([
+                    'date' => date('Y-m-d', strtotime('-2 days')),
+                    'flag' => $params['flag'],
+                ], 'todayNum')['todayNum'],
+                date('Y-m-d', strtotime('yesterday')) => $timeLineModel->getInfoByWhere([
+                    'date' => date('Y-m-d', strtotime('yesterday')),
+                    'flag' => $params['flag'],
+                ], 'todayNum')['todayNum'],
+            ];
+        }
+
         $this->ajaxReturn(1000, 'ok', $result);
     }
 
@@ -901,68 +686,26 @@ class LessonController extends BaseController
      */
     public function searchCommentResult()
     {
-        //把匹配的评论按照课程分组
-        $result = [
-            [
-                "lessonName" => "手把手教你实现个人网站",
-                "comment" => [
-                    [
-                        "content" => "简单易懂，非常适合小白入门。",
-                        "score" => 8,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "对于入门的人来说，可以看一下，感觉还是可以的。",
-                        "score" => 6,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "入门到初级，学以致用，慢慢学习",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "新手必看，十分详细了",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                ]
-            ],
-            [
-                "lessonName" => "html基础",
-                "comment" => [
-                    [
-                        "content" => "简单易懂对于新手入门来说很好",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                    [
-                        "content" => "很基础 也很好理解 挺好",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                ]
-            ],
-            [
-                "lessonName" => "vue实战",
-                "comment" => [
-                    [
-                        "content" => "简单易懂，非常适合小白入门。",
-                        "score" => 8,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "对于入门的人来说，可以看一下，感觉还是可以的。",
-                        "score" => 6,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "入门到初级，学以致用，慢慢学习",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "新手必看，十分详细了",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                ]
-            ],
-        ];
+        $params = input('get.');
+
+        $validate = new LessonValidate();
+        if (!$validate->scene('searchCommentResult')->check($params)) {
+            $this->ajaxReturn($validate->getError());
+        }
+
+        $commentModel = new CommentModel();
+        $payCommentModel = new PayCommentModel();
+
+
+        if (!isset($params['filter']) || $params['filter'] == '') {
+            $this->ajaxReturn(1001, '关键词不能为空');
+        }
+
+        $freeArray = $commentModel->searchCommentResult($params['filter']);
+        $payArray = $payCommentModel->searchCommentResult($params['filter']);
+
+        $result = array_merge($freeArray, $payArray);
+
         $this->ajaxReturn(1000, 'ok', $result);
     }
 
