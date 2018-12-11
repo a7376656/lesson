@@ -35,10 +35,10 @@ class AuthorModel extends Model
     }
 
     /**
-     * 获取人气最高的10个讲师
+     * 获取人气最高的30个讲师
      */
     public function getHotAuthor()
     {
-        return $this->order('fans desc')->limit(10)->select()->toArray();
+        return $this->order('fans desc')->limit(30)->select()->toArray();
     }
 }

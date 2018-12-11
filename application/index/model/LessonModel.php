@@ -32,7 +32,7 @@ class LessonModel extends Model
      */
     public function getLessonCount($where = [])
     {
-        return $this->where($where)->count();
+        return ($this->where($where)->count())*8;
     }
 
     /**

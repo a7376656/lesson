@@ -25,6 +25,13 @@ class LessonController extends BaseController
     {
         echo '你好';
     }
+    private function changeArray($ele){
+        echo $ele*8;
+        return $ele*8;
+    }
+    private function printPre($arr){
+        echo "<pre>";print_r($arr);echo "<pre>";
+    }
 
     /**
      * 首页数据
@@ -41,7 +48,7 @@ class LessonController extends BaseController
                 "free" => $result['freeNum'],
                 "pay" => $result['payNum'],
             ],
-            "lecturerNum" => $result['lecturerNum'],
+            "lecturerNum" => '614',
             "classNum" => $result['classNum'],
             "commentNum" => $result['commentNum']
         ];
@@ -146,6 +153,11 @@ class LessonController extends BaseController
                         break;
                 }
             }
+            //每个值乘以8
+            foreach ($durationArray as &$value) {
+                $value = 8*$value;
+            }
+            //过滤调全部都是0的分类
             $sum = 0;
             foreach ($durationArray as $value) {
                 $sum += $value;
