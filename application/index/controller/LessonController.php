@@ -32,7 +32,18 @@ class LessonController extends BaseController
     private function printPre($arr){
         echo "<pre>";print_r($arr);echo "<pre>";
     }
-
+    private function eachDayStudyNum($cur,$pre,$id,$flag){
+        $timeLineModel = new TimeLineModel();
+        return $timeLineModel->getInfoByWhere([
+            'date' => date('Y-m-d', strtotime($cur)),
+            'flag' => $flag,
+            'id' => $id,
+        ], 'todayNum')['todayNum']-$timeLineModel->getInfoByWhere([
+            'date' => date('Y-m-d', strtotime($pre)),
+            'flag' => $flag,
+            'id' => $id,
+        ], 'todayNum')['todayNum'];
+    }
     /**
      * 首页数据
      */
@@ -650,45 +661,39 @@ class LessonController extends BaseController
 
         switch ($params['flag']) {
             case Constant::FREE_LESSON:
-                $result = $lessonModel->getLessonListByWhere($where, 'id,name,author,introduction,curriculumClassification,difficulty,price,totalTime,studyNum,commentNum,comprehensiveScore,url,authorUrl,grabTime');
+                $result = $lessonModel->getLessonListByWhere($where, 'id,name,author,introduction,curriculumClassification,difficulty,price,totalTime,studyNum,commentNum,comprehensiveScore,url,authorUrl,grabTime,1 as flag');
                 break;
             case Constant::PAY_LESSON:
-                $result = $payLessonModel->getLessonListByWhere($where, 'id,name,author,introduction,curriculumClassification,difficulty,price,totalTime,studyNum,commentNum,comprehensiveScore,url,authorUrl,grabTime');
+                $result = $payLessonModel->getLessonListByWhere($where, 'id,name,author,introduction,curriculumClassification,difficulty,price,totalTime,studyNum,commentNum,comprehensiveScore,url,authorUrl,grabTime,2 as flag');
                 break;
         }
 
         foreach ($result as &$v) {
             $v['timeLine'] = [
-                date('Y-m-d', strtotime('-7 days')) => $timeLineModel->getInfoByWhere([
-                    'date' => date('Y-m-d', strtotime('-7 days')),
-                    'flag' => $params['flag'],
-                ], 'todayNum')['todayNum'],
-                date('Y-m-d', strtotime('-6 days')) => $timeLineModel->getInfoByWhere([
-                    'date' => date('Y-m-d', strtotime('-6 days')),
-                    'flag' => $params['flag'],
-                ], 'todayNum')['todayNum'],
-                date('Y-m-d', strtotime('-5 days')) => $timeLineModel->getInfoByWhere([
-                    'date' => date('Y-m-d', strtotime('-5 days')),
-                    'flag' => $params['flag'],
-                ], 'todayNum')['todayNum'],
-                date('Y-m-d', strtotime('-4 days')) => $timeLineModel->getInfoByWhere([
-                    'date' => date('Y-m-d', strtotime('-4 days')),
-                    'flag' => $params['flag'],
-                ], 'todayNum')['todayNum'],
-                date('Y-m-d', strtotime('-3 days')) => $timeLineModel->getInfoByWhere([
-                    'date' => date('Y-m-d', strtotime('-3 days')),
-                    'flag' => $params['flag'],
-                ], 'todayNum')['todayNum'],
-                date('Y-m-d', strtotime('-2 days')) => $timeLineModel->getInfoByWhere([
-                    'date' => date('Y-m-d', strtotime('-2 days')),
-                    'flag' => $params['flag'],
-                ], 'todayNum')['todayNum'],
-                date('Y-m-d', strtotime('yesterday')) => $timeLineModel->getInfoByWhere([
-                    'date' => date('Y-m-d', strtotime('yesterday')),
-                    'flag' => $params['flag'],
-                ], 'todayNum')['todayNum'],
+                //七天前
+                date('Y-m-d', strtotime('-7 days')) => $this->eachDayStudyNum('-7 days','-8 days',$v['id'],$params['flag']),
+                //6天前
+                date('Y-m-d', strtotime('-6 days')) => $this->eachDayStudyNum('-6 days','-7 days',$v['id'],$params['flag']),
+                //5天前
+                date('Y-m-d', strtotime('-5 days')) => $this->eachDayStudyNum('-5 days','-6 days',$v['id'],$params['flag']),
+                //4天前
+                date('Y-m-d', strtotime('-4 days')) => $this->eachDayStudyNum('-4 days','-5 days',$v['id'],$params['flag']),
+                //3天前
+                date('Y-m-d', strtotime('-3 days')) => $this->eachDayStudyNum('-3 days','-4 days',$v['id'],$params['flag']),
+                //2天前
+                date('Y-m-d', strtotime('-2 days')) => $this->eachDayStudyNum('-2 days','-3 days',$v['id'],$params['flag']),
+                //1天前
+                date('Y-m-d', strtotime('yesterday')) => $this->eachDayStudyNum('yesterday','-2 days',$v['id'],$params['flag']),
             ];
+
+
+            $v['rate']=$timeLineModel->getInfoByWhere([
+                'date' => date('Y-m-d', strtotime('yesterday')),
+                'flag' => $params['flag'],
+                'id' => $v['id'],
+            ], 'rate')['rate'];
         }
+
 
         $this->ajaxReturn(1000, 'ok', $result);
     }

@@ -53,8 +53,8 @@ class PayCommentModel extends Model
     public function searchCommentResult($filter)
     {
         return $this->alias('a')->where([
-            'a.content' => ['like', '%'. $filter .'%']
-        ])->field('a.lessonId,a.content,a.score,b.name as lessonName')
+            'a.content' => ['like', '%' . $filter . '%']
+        ])->field('a.lessonId,a.content,a.score,b.name as lessonName,2 as flag')
             ->join('pay_lesson b', 'a.lessonId=b.id', 'LEFT')
             ->select()->toArray();
     }
