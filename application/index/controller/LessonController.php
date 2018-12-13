@@ -3463,23 +3463,6 @@ class LessonController extends BaseController
                     ],
                 ]
             ],
-            [
-                "lessonName" => "炸鸡音乐实战",
-                "comment" => [
-                    ["content" => "良心。",
-                        "score" => 6,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "入门到初级，学以致用，慢慢学习",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                    ["content" => "新手必看，十分详细了",
-                        "score" => 10,
-                        "lessonId" => 9
-                    ],
-                ]
-            ],
         ];
         $this->ajaxReturn(1000, 'ok', $result);
     }
