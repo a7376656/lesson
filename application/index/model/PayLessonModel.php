@@ -7,6 +7,7 @@
  */
 namespace app\index\model;
 
+use app\common\controller\Constant;
 use think\Model;
 
 class PayLessonModel extends Model
@@ -52,5 +53,41 @@ class PayLessonModel extends Model
     public function getLessonListByWhere($where = [], $field = '*')
     {
         return $this->where($where)->field($field)->select()->toArray();
+    }
+
+    /**
+     * 更新信息
+     * @param $where array 条件
+     * @param $update array 更新语句
+     * @return LessonModel
+     */
+    public function updateInfo($where = [], $update)
+    {
+        return $this->where($where)->update($update);
+    }
+
+    /**
+     * 获取所有课程评论总数
+     * @return float|int
+     */
+    public function getTotalCommentNum()
+    {
+        return $this->sum('commentNum');
+    }
+
+    /**
+     * 获取课程详情
+     * @param $id int 课程id
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function getLessonDetail($id)
+    {
+        return $this->alias('a')->where([
+            'a.id' => $id,
+            'b.date' => date('Y-m-d', strtotime('yesterday')),//昨天日期
+            'b.flag' => Constant::PAY_LESSON,
+        ])->field('a.*,b.rate')
+            ->join('l_time_line b', 'a.id=b.id', 'LEFT')
+            ->find()->toArray();
     }
 }
