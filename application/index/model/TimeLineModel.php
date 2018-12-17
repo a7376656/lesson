@@ -7,11 +7,13 @@
  */
 namespace app\index\model;
 
+use app\common\controller\Constant;
 use think\Model;
 
 class TimeLineModel extends Model
 {
     protected $table = 'l_time_line';
+    protected $resultSetType = 'collection';
 
     /**
      * 根据条件获取信息
@@ -33,5 +35,33 @@ class TimeLineModel extends Model
     public function addTimeLine($data)
     {
         return $this->insert($data);
+    }
+
+    /**
+     * 获取七天内增长数最高的前30名免费课程
+     * @return array
+     */
+    public function getWeekRaterFreeList()
+    {
+        return $this->alias('a')->where([
+            'a.date' => date('Y-m-d', strtotime('yesterday')),//昨天日期
+            'a.flag' => Constant::FREE_LESSON,
+        ])->field('a.id,a.name,a.rate,b.curriculumClassification,b.difficulty,b.price,b.totalTime')
+            ->join('l_lesson b', 'a.id=b.id', 'LEFT')
+            ->order('rate desc')->limit(30)->select()->toArray();
+    }
+
+    /**
+     * 获取七天内增长数最高的前30名付费课程
+     * @return array
+     */
+    public function getWeekRaterPayList()
+    {
+        return $this->alias('a')->where([
+            'a.date' => date('Y-m-d', strtotime('yesterday')),//昨天日期
+            'a.flag' => Constant::PAY_LESSON,
+        ])->field('a.id,a.name,a.rate,b.curriculumClassification,b.difficulty,b.price,b.totalTime')
+            ->join('l_pay_lesson b', 'a.id=b.id', 'LEFT')
+            ->order('rate desc')->limit(10)->select()->toArray();
     }
 }

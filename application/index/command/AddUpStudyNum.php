@@ -17,6 +17,7 @@ use QL\QueryList;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
+use think\Db;
 
 class AddUpStudyNum extends Command
 {
@@ -39,57 +40,66 @@ class AddUpStudyNum extends Command
         $freeLessonIds = $lessonModel->getAllLessonIds();//获取所有课程id
 
         $yesterday = date('Y-m-d', strtotime('yesterday'));//昨天日期
-        $twoDaysAgo = date('Y-m-d', strtotime('-2 days'));//前天日期，计算增长率
+        $sevenDaysAgo = date('Y-m-d', strtotime('-7 days'));//昨天的七天前日期
 
         $ql = QueryList::getInstance();
         $ql->use(PhantomJs::class, Constant::LINUX_PHANTOM_URL);
 
-        for ($i = 1; $i < 5; $i++) {
-            $url = 'https://www.imooc.com/course/list?sort=pop&page='. $i;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $content = curl_exec($ch);
-            curl_close($ch);
+        Db::startTrans();
+        try {
+            for ($i = 1; $i < 6; $i++) {
+                $url = 'https://www.imooc.com/course/list?sort=pop&page=' . $i;
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $content = curl_exec($ch);
+                curl_close($ch);
 
-            $html = $ql->html($content)->rules([
-                'url' => ['.course-list .course-card', 'href'],
-                'name' => ['h3.course-card-name', 'html'],
-                'studyNum' => ['div.container div.course-card-info', 'text', '-span:eq(0)'],
-            ])->query()->getData();
+                $html = $ql->html($content)->rules([
+                    'url' => ['.course-list .course-card', 'href'],
+                    'name' => ['h3.course-card-name', 'html'],
+                    'studyNum' => ['div.container div.course-card-info', 'text', '-span:eq(0)'],
+                ])->query()->getData();
 
-            foreach ($html as $v) {
-                $info = [
-                    'id' => explode('/', $v['url'])[2],//课程ID（慕课网上的ID）
-                    'name' => $v['name'],
-                    'todayNum' => $v['studyNum'],
-                    'date' => $yesterday,
-                    'flag' => Constant::FREE_LESSON,
-                ];
-
-                if (in_array($info['id'], $freeLessonIds)) {
-                    //获取前天的学习人数
-                    $twoDaysAgoNum = $timeLineModel->getInfoByWhere([
-                        'id' => $info['id'],
-                        'date' => $twoDaysAgo,
-                        'flag' => Constant::FREE_LESSON,
-                    ], 'todayNum')['todayNum'];
-                    //计算增长率
-                    $info['rate'] = sprintf('%.7f', ($info['todayNum'] - $twoDaysAgoNum) / $twoDaysAgoNum);
-                    //判断数据库中是否已有当天的数据
-                    $result = $timeLineModel->getInfoByWhere([
-                        'id' => $info['id'],
+                foreach ($html as $v) {
+                    $info = [
+                        'id' => explode('/', $v['url'])[2],//课程ID（慕课网上的ID）
+                        'name' => $v['name'],
+                        'todayNum' => $v['studyNum'],
                         'date' => $yesterday,
                         'flag' => Constant::FREE_LESSON,
-                    ], 'id');
-                    if ($result) {
-                        continue;
+                    ];
+
+                    if (in_array($info['id'], $freeLessonIds)) {
+                        //获取七天前的学习人数
+                        $sevenDaysAgoNum = $timeLineModel->getInfoByWhere([
+                            'id' => $info['id'],
+                            'date' => $sevenDaysAgo,
+                            'flag' => Constant::FREE_LESSON,
+                        ], 'todayNum')['todayNum'];
+                        //计算增长数
+                        $sevenDaysAgoNum = is_null($sevenDaysAgoNum) ? $info['todayNum'] : $sevenDaysAgoNum;
+                        $info['rate'] = $info['todayNum'] - $sevenDaysAgoNum;
+                        //判断数据库中是否已有当天的数据
+                        $result = $timeLineModel->getInfoByWhere([
+                            'id' => $info['id'],
+                            'date' => $yesterday,
+                            'flag' => Constant::FREE_LESSON,
+                        ], 'id');
+                        if ($result) {
+                            continue;
+                        }
+                        //添加进数据库
+                        $timeLineModel->addTimeLine($info);
                     }
-                    //添加进数据库
-                    $timeLineModel->addTimeLine($info);
                 }
             }
+
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            $output->writeln($e->getMessage());
         }
 
         $output->writeln('ok');
