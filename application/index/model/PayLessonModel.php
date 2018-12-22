@@ -35,6 +35,11 @@ class PayLessonModel extends Model
         return $this->where($where)->count();
     }
 
+    public function getLessonCountReal($where = [])
+    {
+        return $this->where($where)->count();
+    }
+
     /**
      * 获取所有课程的id
      * @return array

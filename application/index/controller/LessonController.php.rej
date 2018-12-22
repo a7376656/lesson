@@ -1,0 +1,25 @@
+diff a/application/index/controller/LessonController.php b/application/index/controller/LessonController.php	(rejected hunks)
+@@ -3463,6 +3463,23 @@
+                     ],
+                 ]
+             ],
++            [
++                "lessonName" => "炸鸡音乐实战",
++                "comment" => [
++                    ["content" => "良心。",
++                        "score" => 6,
++                        "lessonId" => 9
++                    ],
++                    ["content" => "入门到初级，学以致用，慢慢学习",
++                        "score" => 10,
++                        "lessonId" => 9
++                    ],
++                    ["content" => "新手必看，十分详细了",
++                        "score" => 10,
++                        "lessonId" => 9
++                    ],
++                ]
++            ],
+         ];
+         $this->ajaxReturn(1000, 'ok', $result);
+     }
