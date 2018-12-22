@@ -501,15 +501,9 @@ class LessonController extends BaseController
         switch ($params['flag']) {
             case Constant::FREE_LESSON:
                 $lessonInfo = $this->getLessonInfo($lessonModel, $commentModel, $params);
-                $lessonInfo['studyRank']=2;
-                $lessonInfo['commentRank']=6;
-                $lessonInfo['scoreRank']=3;
                 break;
             case Constant::PAY_LESSON:
                 $lessonInfo = $this->getLessonInfo($payLessonModel, $payCommentModel, $params);
-                $lessonInfo['studyRank']=3;
-                $lessonInfo['commentRank']=2;
-                $lessonInfo['scoreRank']=3;
                 break;
         }
 
