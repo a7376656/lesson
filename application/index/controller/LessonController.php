@@ -25,9 +25,17 @@ class LessonController extends BaseController
     {
         echo '你好';
     }
-    private function changeArray($ele){
-        echo $ele*8;
-        return $ele*8;
+    private function classInfo($lessonModel){
+        $classList =["前端开发","后端开发","移动开发","前沿技术","运维&测试","算法&数学","云计算&大数据","UI设计&多媒体","数据库","游戏"];
+        $classInfo= [];
+        foreach ($classList as $v){
+            $temp = [
+                "key" => $v,
+                "value" => $lessonModel->getLessonCount(['curriculumClassification' => $v,])
+            ];
+            array_push($classInfo ,$temp);
+        }
+        return $classInfo;
     }
     private function printPre($arr){
         echo "<pre>";print_r($arr);echo "<pre>";
@@ -53,7 +61,8 @@ class LessonController extends BaseController
 
         //获取慕课网教师数、分类数、课程数目、评论数
         $result = $dataModel->getInfo();
-
+        $freeClass = $this->classInfo( new LessonModel());
+        $payClass = $this->classInfo( new PayLessonModel());
         $data = [
             "lessonNum" => [
                 "free" => $result['freeNum'],
@@ -61,7 +70,9 @@ class LessonController extends BaseController
             ],
             "lecturerNum" => '614',
             "classNum" => $result['classNum'],
-            "commentNum" => $result['commentNum']
+            "commentNum" => $result['commentNum'],
+            "freeClass" => $freeClass,
+            "payClass" => $payClass,
         ];
 
         $this->ajaxReturn(1000, 'ok', $data);
@@ -490,11 +501,19 @@ class LessonController extends BaseController
         switch ($params['flag']) {
             case Constant::FREE_LESSON:
                 $lessonInfo = $this->getLessonInfo($lessonModel, $commentModel, $params);
+                $lessonInfo['studyRank']=2;
+                $lessonInfo['commentRank']=6;
+                $lessonInfo['scoreRank']=3;
                 break;
             case Constant::PAY_LESSON:
                 $lessonInfo = $this->getLessonInfo($payLessonModel, $payCommentModel, $params);
+                $lessonInfo['studyRank']=3;
+                $lessonInfo['commentRank']=2;
+                $lessonInfo['scoreRank']=3;
                 break;
         }
+
+//        $this->printPre($lessonInfo);
 
         $this->ajaxReturn(1000, 'ok', $lessonInfo);
     }
@@ -523,41 +542,37 @@ class LessonController extends BaseController
         }
         $lessonInfo['sameScoreNum'] = $lessonModel->getLessonCount([
             'comprehensiveScore' => $lessonInfo['comprehensiveScore'],
+            'curriculumClassification' => $lessonInfo['curriculumClassification'],
         ]);//与该课程分数相同的课程数
+        $lessonInfo['sameCommentNum'] = $lessonModel->getLessonCountReal([
+            'commentNum' => [['>=',  $lessonInfo['commentNum']*0.9], ['<',  $lessonInfo['commentNum']*1.1]],
+            'curriculumClassification' => $lessonInfo['curriculumClassification'],
+        ]);//与该课程评论数相同的课程数
+
+        $lessonInfo['sameStudyNum'] = $lessonModel->getLessonCountReal([
+            'studyNum' => [['>=',  $lessonInfo['studyNum']*0.9], ['<',  $lessonInfo['studyNum']*1.1]],
+            'curriculumClassification' => $lessonInfo['curriculumClassification'],
+        ]);//与该课程学习数相同的课程数
         $lessonInfo['totalMember'] = $lessonModel->getLessonCount([
             'curriculumClassification' => $lessonInfo['curriculumClassification'],
         ]);//与该课程同分类的课程数
 
         //过去七天学习人数
         $lessonInfo['lastSevenDayInfo'] = [
-            date('Y-m-d', strtotime('-7 days')) => $timeLineModel->getInfoByWhere([
-                'date' => date('Y-m-d', strtotime('-7 days')),
-                'flag' => $params['flag'],
-            ], 'todayNum')['todayNum'],
-            date('Y-m-d', strtotime('-6 days')) => $timeLineModel->getInfoByWhere([
-                'date' => date('Y-m-d', strtotime('-6 days')),
-                'flag' => $params['flag'],
-            ], 'todayNum')['todayNum'],
-            date('Y-m-d', strtotime('-5 days')) => $timeLineModel->getInfoByWhere([
-                'date' => date('Y-m-d', strtotime('-5 days')),
-                'flag' => $params['flag'],
-            ], 'todayNum')['todayNum'],
-            date('Y-m-d', strtotime('-4 days')) => $timeLineModel->getInfoByWhere([
-                'date' => date('Y-m-d', strtotime('-4 days')),
-                'flag' => $params['flag'],
-            ], 'todayNum')['todayNum'],
-            date('Y-m-d', strtotime('-3 days')) => $timeLineModel->getInfoByWhere([
-                'date' => date('Y-m-d', strtotime('-3 days')),
-                'flag' => $params['flag'],
-            ], 'todayNum')['todayNum'],
-            date('Y-m-d', strtotime('-2 days')) => $timeLineModel->getInfoByWhere([
-                'date' => date('Y-m-d', strtotime('-2 days')),
-                'flag' => $params['flag'],
-            ], 'todayNum')['todayNum'],
-            date('Y-m-d', strtotime('yesterday')) => $timeLineModel->getInfoByWhere([
-                'date' => date('Y-m-d', strtotime('yesterday')),
-                'flag' => $params['flag'],
-            ], 'todayNum')['todayNum'],
+            //七天前
+            date('Y-m-d', strtotime('-7 days')) => $this->eachDayStudyNum('-7 days','-8 days',$params['id'],$params['flag']),
+            //6天前
+            date('Y-m-d', strtotime('-6 days')) => $this->eachDayStudyNum('-6 days','-7 days',$params['id'],$params['flag']),
+            //5天前
+            date('Y-m-d', strtotime('-5 days')) => $this->eachDayStudyNum('-5 days','-6 days',$params['id'],$params['flag']),
+            //4天前
+            date('Y-m-d', strtotime('-4 days')) => $this->eachDayStudyNum('-4 days','-5 days',$params['id'],$params['flag']),
+            //3天前
+            date('Y-m-d', strtotime('-3 days')) => $this->eachDayStudyNum('-3 days','-4 days',$params['id'],$params['flag']),
+            //2天前
+            date('Y-m-d', strtotime('-2 days')) => $this->eachDayStudyNum('-2 days','-3 days',$params['id'],$params['flag']),
+            //1天前
+            date('Y-m-d', strtotime('yesterday')) => $this->eachDayStudyNum('yesterday','-2 days',$params['id'],$params['flag']),
         ];
 
         //评论信息
