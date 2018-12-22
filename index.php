@@ -11,18 +11,22 @@
 // [ 应用入口文件 ]
 $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
 
-$allow_origin = array(
-    "http://localhost:8080",
-    "http://localhost:8081"
-);
-
-
-if(in_array($origin, $allow_origin)) {
-    header("Access-Control-Allow-Origin:".$origin);
-    header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Accept, Authorization");
-    header("Access-Control-Allow-Credentials: true");
-}
+//$allow_origin = array(
+//    "http://localhost:8080",
+//    "http://localhost:8081"
+//);
+//
+//
+//if(in_array($origin, $allow_origin)) {
+//    header("Access-Control-Allow-Origin:".$origin);
+//    header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS");
+//    header("Access-Control-Allow-Headers: Content-Type, Accept, Authorization");
+//    header("Access-Control-Allow-Credentials: true");
+//}
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Accept, Authorization, platform");
+header("Access-Control-Allow-Credentials: true");
 
 if($_SERVER['REQUEST_METHOD'] == "OPTIONS") {
     exit;
