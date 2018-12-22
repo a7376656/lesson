@@ -93,4 +93,34 @@ class LessonModel extends Model
             ->join('l_time_line b', 'a.id=b.id', 'LEFT')
             ->find()->toArray();
     }
+
+    /**
+     * 根据学习人数排名返回课程id
+     * @param $curriculumClassification string 课程分类
+     * @return array
+     */
+    public function getIdsByStudyNum($curriculumClassification)
+    {
+        return $this->where('curriculumClassification', $curriculumClassification)->order('studyNum desc')->column('id');
+    }
+
+    /**
+     * 根据评论人数排名返回课程id
+     * @param $curriculumClassification string 课程分类
+     * @return array
+     */
+    public function getIdsByCommentNum($curriculumClassification)
+    {
+        return $this->where('curriculumClassification', $curriculumClassification)->order('commentNum desc')->column('id');
+    }
+
+    /**
+     * 根据评分排名返回课程id
+     * @param $curriculumClassification string 课程分类
+     * @return array
+     */
+    public function getIdsByScore($curriculumClassification)
+    {
+        return $this->where('curriculumClassification', $curriculumClassification)->order('comprehensiveScore desc')->column('id');
+    }
 }

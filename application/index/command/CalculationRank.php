@@ -7,14 +7,9 @@
  */
 namespace app\index\command;
 
-use app\common\controller\Constant;
-use app\index\controller\IndexController;
 use app\index\model\ClassificationModel;
 use app\index\model\LessonModel;
 use app\index\model\PayLessonModel;
-use app\index\model\TimeLineModel;
-use QL\Ext\PhantomJs;
-use QL\QueryList;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
@@ -45,9 +40,47 @@ class CalculationRank extends Command
         Db::startTrans();
         try {
             foreach ($classInfo as $v) {
-                //免费课程
-                $ids = $lessonModel->getLessonListByWhere(['curriculumClassification' => $v], 'id,studyNum,commentNum,comprehensiveScore');
+                //学习人数
+                $freeStudyIds = $lessonModel->getIdsByStudyNum($v);
+                $payStudyIds = $payLessonModel->getIdsByStudyNum($v);
+                $num = 1;
+                foreach ($freeStudyIds as $value) {
+                    $lessonModel->updateInfo(['id' => $value], ['studyRank' => $num]);
+                    $num ++;
+                }
+                $num = 1;
+                foreach ($payStudyIds as $value) {
+                    $payLessonModel->updateInfo(['id' => $value], ['studyRank' => $num]);
+                    $num ++;
+                }
 
+                //评论人数
+                $freeCommentIds = $lessonModel->getIdsByCommentNum($v);
+                $payCommentIds = $payLessonModel->getIdsByCommentNum($v);
+                $num = 1;
+                foreach ($freeCommentIds as $value) {
+                    $lessonModel->updateInfo(['id' => $value], ['commentRank' => $num]);
+                    $num ++;
+                }
+                $num = 1;
+                foreach ($payCommentIds as $value) {
+                    $payLessonModel->updateInfo(['id' => $value], ['commentRank' => $num]);
+                    $num ++;
+                }
+
+                //评分
+                $freeScoreIds = $lessonModel->getIdsByScore($v);
+                $payScoreIds = $payLessonModel->getIdsByScore($v);
+                $num = 1;
+                foreach ($freeScoreIds as $value) {
+                    $lessonModel->updateInfo(['id' => $value], ['scoreRank' => $num]);
+                    $num ++;
+                }
+                $num = 1;
+                foreach ($payScoreIds as $value) {
+                    $payLessonModel->updateInfo(['id' => $value], ['scoreRank' => $num]);
+                    $num ++;
+                }
             }
 
             Db::commit();

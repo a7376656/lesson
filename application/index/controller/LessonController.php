@@ -561,34 +561,20 @@ class LessonController extends BaseController
         ];
 
         //评论信息
-        $lessonInfo['comment'] = [
-            [
-                'class' => "入门/新手/小白",
-                'comment' => $commentModel->getCommentListByWhere([
+        $arr = json_decode(file_get_contents(__DIR__. '/commentKeyword.json'), true);
+
+        foreach ($arr as $v) {
+            $info['class'] = $v['label'];
+            $info['comment'] = [];
+            foreach ($v['list'] as $val) {
+                $info['comment'] = array_merge($commentModel->getCommentListByWhere([
                     'lessonId' => $params['id'],
-                    'content' => ['like', '%入门%'],
-                    'content' => ['like', '%新手%'],
-                    'content' => ['like', '%小白%'],
-                ], 'content,score,lessonId'),
-            ],
-            [
-                'class' => "挺好的/不错",
-                'comment' => $commentModel->getCommentListByWhere([
-                    'lessonId' => $params['id'],
-                    'content' => ['like', '%挺好的%'],
-                    'content' => ['like', '%不错%'],
-                ], 'content,score,lessonId'),
-            ],
-            [
-                'class' => "简单/易懂/基础",
-                'comment' => $commentModel->getCommentListByWhere([
-                    'lessonId' => $params['id'],
-                    'content' => ['like', '%简单%'],
-                    'content' => ['like', '%易懂%'],
-                    'content' => ['like', '%基础%'],
-                ], 'content,score,lessonId'),
-            ],
-        ];
+                    'content' => ['like', '%'. $val .'%'],
+                ], 'content,score,lessonId'), $info['comment']);
+            }
+
+            $lessonInfo['comment'][] = $info;
+        }
 
         //评论分数信息
         $lessonInfo['score'] = [
@@ -725,6 +711,5 @@ class LessonController extends BaseController
 
         $this->ajaxReturn(1000, 'ok', $result);
     }
-
 }
 
