@@ -578,7 +578,7 @@ class LessonController extends BaseController
         //评论信息
         $lessonInfo['comment'] = [
             [
-                'class' => "入门/新手/小白",
+                'class' => "初级",
                 'comment' => $commentModel->getCommentListByWhere([
                     'lessonId' => $params['id'],
                     'content' => ['like', '%入门%'],
@@ -587,7 +587,7 @@ class LessonController extends BaseController
                 ], 'content,score,lessonId'),
             ],
             [
-                'class' => "挺好的/不错",
+                'class' => "很好",
                 'comment' => $commentModel->getCommentListByWhere([
                     'lessonId' => $params['id'],
                     'content' => ['like', '%挺好的%'],
@@ -595,7 +595,7 @@ class LessonController extends BaseController
                 ], 'content,score,lessonId'),
             ],
             [
-                'class' => "简单/易懂/基础",
+                'class' => "基础",
                 'comment' => $commentModel->getCommentListByWhere([
                     'lessonId' => $params['id'],
                     'content' => ['like', '%简单%'],
